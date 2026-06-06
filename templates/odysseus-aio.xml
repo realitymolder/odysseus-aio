@@ -24,6 +24,10 @@
   <Config Name="ChromaDB Port" Target="ODYSSEUS_CHROMADB_PORT" Default="8100" Description="Host port for ChromaDB" Type="Variable" Display="always" Required="false" Mask="false">8100</Config>
   <Config Name="SearXNG Port" Target="ODYSSEUS_SEARXNG_PORT" Default="8080" Description="Host port for SearXNG" Type="Variable" Display="always" Required="false" Mask="false">8080</Config>
   <Config Name="ntfy Port" Target="ODYSSEUS_NTFY_PORT" Default="8091" Description="Host port for ntfy" Type="Variable" Display="always" Required="false" Mask="false">8091</Config>
+  <Config Name="App Container Port" Target="ODYSSEUS_APP_CONTAINER_PORT" Default="7000" Description="Internal port Odysseus listens on (change only if using a custom image)" Type="Variable" Display="advanced" Required="false" Mask="false">7000</Config>
+  <Config Name="ChromaDB Container Port" Target="ODYSSEUS_CHROMADB_CONTAINER_PORT" Default="8000" Description="Internal port ChromaDB listens on" Type="Variable" Display="advanced" Required="false" Mask="false">8000</Config>
+  <Config Name="SearXNG Container Port" Target="ODYSSEUS_SEARXNG_CONTAINER_PORT" Default="8080" Description="Internal port SearXNG listens on" Type="Variable" Display="advanced" Required="false" Mask="false">8080</Config>
+  <Config Name="ntfy Container Port" Target="ODYSSEUS_NTFY_CONTAINER_PORT" Default="80" Description="Internal port ntfy listens on" Type="Variable" Display="advanced" Required="false" Mask="false">80</Config>
   <Config Name="PUID" Target="ODYSSEUS_PUID" Default="99" Description="User ID for file permissions" Type="Variable" Display="always" Required="false" Mask="false">99</Config>
   <Config Name="PGID" Target="ODYSSEUS_PGID" Default="100" Description="Group ID for file permissions" Type="Variable" Display="always" Required="false" Mask="false">100</Config>
   <Config Name="Auth Enabled" Target="ODYSSEUS_AUTH_ENABLED" Default="true" Description="Enable authentication" Type="Variable" Display="always" Required="false" Mask="false">true</Config>

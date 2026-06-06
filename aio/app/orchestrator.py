@@ -47,14 +47,16 @@ CONTAINER_SPECS = [
         "name": "odysseus-aio-chromadb",
         "image": "docker.io/chromadb/chroma:latest",
         "volumes": {"odysseus_aio_chromadb": "/chroma/chroma"},
-        "ports": lambda e: [(e.get("ODYSSEUS_CHROMADB_PORT", "8100"), "8000")],
+        "container_port": lambda e: e.get("ODYSSEUS_CHROMADB_CONTAINER_PORT", "8000"),
+        "ports": lambda e: [(e.get("ODYSSEUS_CHROMADB_PORT", "8100"), e.get("ODYSSEUS_CHROMADB_CONTAINER_PORT", "8000"))],
         "env": {"ANONYMIZED_TELEMETRY": "FALSE"},
     },
     {
         "name": "odysseus-aio-searxng",
         "image": "docker.io/searxng/searxng:latest",
         "volumes": {"odysseus_aio_searxng": "/etc/searxng"},
-        "ports": lambda e: [(e.get("ODYSSEUS_SEARXNG_PORT", "8080"), "8080")],
+        "container_port": lambda e: e.get("ODYSSEUS_SEARXNG_CONTAINER_PORT", "8080"),
+        "ports": lambda e: [(e.get("ODYSSEUS_SEARXNG_PORT", "8080"), e.get("ODYSSEUS_SEARXNG_CONTAINER_PORT", "8080"))],
         "env": lambda e: {
             "SEARXNG_BASE_URL": f"http://localhost:{e.get('ODYSSEUS_SEARXNG_PORT', '8080')}/",
             "SEARXNG_SECRET": e.get("ODYSSEUS_SEARXNG_SECRET", ""),
@@ -67,7 +69,8 @@ CONTAINER_SPECS = [
         "image": "docker.io/binwiederhier/ntfy",
         "command": ["serve"],
         "volumes": {"odysseus_aio_ntfy": "/var/cache/ntfy"},
-        "ports": lambda e: [(e.get("ODYSSEUS_NTFY_PORT", "8091"), "80")],
+        "container_port": lambda e: e.get("ODYSSEUS_NTFY_CONTAINER_PORT", "80"),
+        "ports": lambda e: [(e.get("ODYSSEUS_NTFY_PORT", "8091"), e.get("ODYSSEUS_NTFY_CONTAINER_PORT", "80"))],
         "env": lambda e: {
             "NTFY_BASE_URL": e.get("ODYSSEUS_NTFY_BASE_URL", f"http://localhost:{e.get('ODYSSEUS_NTFY_PORT', '8091')}"),
         },
@@ -82,7 +85,8 @@ CONTAINER_SPECS = [
             "odysseus_aio_huggingface": "/app/.cache/huggingface",
             "odysseus_aio_local": "/app/.local",
         },
-        "ports": lambda e: [(e.get("ODYSSEUS_APP_PORT", "7000"), "7000")],
+        "container_port": lambda e: e.get("ODYSSEUS_APP_CONTAINER_PORT", "7000"),
+        "ports": lambda e: [(e.get("ODYSSEUS_APP_PORT", "7000"), e.get("ODYSSEUS_APP_CONTAINER_PORT", "7000"))],
         "env": lambda e: build_app_env(e),
         "extra_hosts": ["host.docker.internal:host-gateway"],
     },
@@ -94,9 +98,11 @@ def build_app_env(master_env):
     for master_key, container_key in APP_ENV_MAP.items():
         if master_key in master_env and master_env[master_key]:
             env[container_key] = master_env[master_key]
-    env["SEARXNG_INSTANCE"] = "http://odysseus-aio-searxng:8080"
+    searxng_port = master_env.get("ODYSSEUS_SEARXNG_CONTAINER_PORT", "8080")
+    chromadb_port = master_env.get("ODYSSEUS_CHROMADB_CONTAINER_PORT", "8000")
+    env["SEARXNG_INSTANCE"] = f"http://odysseus-aio-searxng:{searxng_port}"
     env["CHROMADB_HOST"] = "odysseus-aio-chromadb"
-    env["CHROMADB_PORT"] = "8000"
+    env["CHROMADB_PORT"] = chromadb_port
     return env
 
 
@@ -129,9 +135,13 @@ def get_master_env():
     env = {}
     for key in list(APP_ENV_MAP.keys()) + [
         "ODYSSEUS_APP_PORT",
+        "ODYSSEUS_APP_CONTAINER_PORT",
         "ODYSSEUS_CHROMADB_PORT",
+        "ODYSSEUS_CHROMADB_CONTAINER_PORT",
         "ODYSSEUS_SEARXNG_PORT",
+        "ODYSSEUS_SEARXNG_CONTAINER_PORT",
         "ODYSSEUS_NTFY_PORT",
+        "ODYSSEUS_NTFY_CONTAINER_PORT",
         "ODYSSEUS_SEARXNG_SECRET",
         "ODYSSEUS_NTFY_BASE_URL",
         "ODYSSEUS_DNS_SERVERS",
