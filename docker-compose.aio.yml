@@ -1,0 +1,24 @@
+services:
+  odysseus-aio:
+    build:
+      context: .
+      dockerfile: aio/Dockerfile
+    container_name: odysseus-aio
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - odysseus-aio-data:/data
+    environment:
+      - ODYSSEUS_APP_PORT=7000
+      - ODYSSEUS_CHROMADB_PORT=8100
+      - ODYSSEUS_SEARXNG_PORT=8080
+      - ODYSSEUS_NTFY_PORT=8091
+      - ODYSSEUS_PUID=99
+      - ODYSSEUS_PGID=100
+      - ODYSSEUS_AUTH_ENABLED=true
+      - ODYSSEUS_ADMIN_USER=admin
+    restart: unless-stopped
+
+volumes:
+  odysseus-aio-data:

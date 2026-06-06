@@ -1,0 +1,42 @@
+<Container version="2">
+  <Name>Odysseus-AIO</Name>
+  <Repository>ghcr.io/realitymolder/odysseus-unraid:aio</Repository>
+  <Registry>https://ghcr.io</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/pewdiepie-archdaemon/odysseus/issues</Support>
+  <Project>https://github.com/realitymolder/Odysseus-Unraid</Project>
+  <Overview>Self-hosted AI workspace — master container that auto-deploys the full stack (Odysseus, ChromaDB, SearXNG, ntfy). One install, full environment.</Overview>
+  <Description>Odysseus AIO is the all-in-one installer for the Odysseus self-hosted AI workspace.&#13;&#13;On first start, it automatically pulls and provisions 4 containers:&#13;odysseus-aio-app — the main AI workspace (port 7000)&#13;odysseus-aio-chromadb — vector database (port 8100)&#13;odysseus-aio-searxng — meta search engine (port 8080)&#13;odysseus-aio-ntfy — push notifications (port 8091)&#13;&#13;Management UI available at http://[IP]:9000 for start, stop, update, and status monitoring.&#13;&#13;No separate companion template installs needed — this is everything in one.</Description>
+  <Category>AI:Tools</Category>
+  <WebUI>http://[IP]:[PORT:9000]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/realitymolder/Odysseus-Unraid/main/templates/odysseus-aio.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/realitymolder/Odysseus-Unraid/main/icon.svg</Icon>
+  <DonorText>Support Odysseus development</DonorText>
+  <DonorLink>https://github.com/pewdiepie-archdaemon/odysseus</DonorLink>
+
+  <Config Name="Management Port" Target="9000" Default="9000" Mode="tcp" Description="AIO management web UI port" Type="Port" Display="always" Required="true" Mask="false">9000</Config>
+  <Config Name="AIO Data" Target="/data" Default="/mnt/user/appdata/odysseus-aio/data" Mode="rw" Description="AIO master container persistent state" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/odysseus-aio/data</Config>
+  <Config Name="Docker Socket" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="rw" Description="Required for managing sibling containers. Must map to host /var/run/docker.sock" Type="Path" Display="always" Required="true" Mask="false">/var/run/docker.sock</Config>
+  <Config Name="App Port" Target="ODYSSEUS_APP_PORT" Default="7000" Description="Host port for the Odysseus web UI" Type="Variable" Display="always" Required="false" Mask="false">7000</Config>
+  <Config Name="ChromaDB Port" Target="ODYSSEUS_CHROMADB_PORT" Default="8100" Description="Host port for ChromaDB" Type="Variable" Display="always" Required="false" Mask="false">8100</Config>
+  <Config Name="SearXNG Port" Target="ODYSSEUS_SEARXNG_PORT" Default="8080" Description="Host port for SearXNG" Type="Variable" Display="always" Required="false" Mask="false">8080</Config>
+  <Config Name="ntfy Port" Target="ODYSSEUS_NTFY_PORT" Default="8091" Description="Host port for ntfy" Type="Variable" Display="always" Required="false" Mask="false">8091</Config>
+  <Config Name="PUID" Target="ODYSSEUS_PUID" Default="99" Description="User ID for file permissions" Type="Variable" Display="always" Required="false" Mask="false">99</Config>
+  <Config Name="PGID" Target="ODYSSEUS_PGID" Default="100" Description="Group ID for file permissions" Type="Variable" Display="always" Required="false" Mask="false">100</Config>
+  <Config Name="Auth Enabled" Target="ODYSSEUS_AUTH_ENABLED" Default="true" Description="Enable authentication" Type="Variable" Display="always" Required="false" Mask="false">true</Config>
+  <Config Name="Admin User" Target="ODYSSEUS_ADMIN_USER" Default="admin" Description="First admin account username" Type="Variable" Display="always" Required="false" Mask="false">admin</Config>
+  <Config Name="Admin Password" Target="ODYSSEUS_ADMIN_PASSWORD" Default="" Description="Pre-seed admin password (leave blank for auto-generated)" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="LLM Host" Target="ODYSSEUS_LLM_HOST" Default="" Description="Primary LLM server hostname or IP" Type="Variable" Display="always" Required="false" Mask="false"></Config>
+  <Config Name="OpenAI API Key" Target="ODYSSEUS_OPENAI_API_KEY" Default="" Description="OpenAI API key" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="Ollama URL" Target="ODYSSEUS_OLLAMA_BASE_URL" Default="" Description="Ollama server URL (e.g. http://host.docker.internal:11434)" Type="Variable" Display="always" Required="false" Mask="false"></Config>
+  <Config Name="HF Token" Target="ODYSSEUS_HF_TOKEN" Default="" Description="HuggingFace token for gated models" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="SearXNG Secret" Target="ODYSSEUS_SEARXNG_SECRET" Default="" Description="SearXNG secret key (auto-generated if empty)" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="ntfy Base URL" Target="ODYSSEUS_NTFY_BASE_URL" Default="" Description="Public ntfy URL for push notifications" Type="Variable" Display="always" Required="false" Mask="false"></Config>
+  <Config Name="Brave API Key" Target="ODYSSEUS_DATA_BRAVE_API_KEY" Default="" Description="Brave Search API key" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="Google API Key" Target="ODYSSEUS_GOOGLE_API_KEY" Default="" Description="Google Custom Search API key" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="Tavily API Key" Target="ODYSSEUS_TAVILY_API_KEY" Default="" Description="Tavily Search API key" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="Serper API Key" Target="ODYSSEUS_SERPER_API_KEY" Default="" Description="Serper API key" Type="Variable" Display="always" Required="false" Mask="true"></Config>
+</Container>

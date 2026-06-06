@@ -1,3 +1,6 @@
+# Odysseus full stack — 4 containers (traditional install)
+# For the all-in-one master container, use: docker compose -f docker-compose.aio.yml up -d
+
 services:
   odysseus:
     image: ghcr.io/realitymolder/odysseus-unraid:latest

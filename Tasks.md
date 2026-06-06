@@ -45,8 +45,19 @@
 - [ ] Click "Submit" for moderator review
 - [ ] Wait for moderator review and address any feedback
 
-## Phase 5: Ongoing maintenance
+## Phase 5: AIO mastercontainer
+
+- [ ] Build and push `ghcr.io/realitymolder/odysseus-unraid:aio` via `.github/workflows/docker-publish-aio.yml`
+- [ ] Test locally: `docker compose -f docker-compose.aio.yml up -d` then visit `http://localhost:9000`
+- [ ] Verify auto-deploy provisions all 4 containers (odysseus-aio-app, chromadb, searxng, ntfy)
+- [ ] Verify management UI: Start, Stop, Update, Remove buttons work
+- [ ] Submit `templates/odysseus-aio.xml` to Unraid CA
+- [ ] On Unraid: install from CA → single template → verify full stack comes up
+- [ ] Log in at `http://<unraid-ip>:7000` — same as 4-container install
+
+## Phase 6: Ongoing maintenance
 
 - [ ] Optional: enable NVIDIA GPU passthrough (`--runtime=nvidia` + `NVIDIA_VISIBLE_DEVICES=all`)
-- [ ] Update the Odysseus image by re-running the GH Action workflow on demand
+- [ ] Update the Odysseus app image by re-running the GH Action workflow on demand
+- [ ] Update the AIO image by re-running the AIO workflow on demand
 - [ ] Keep `docker-compose.yml` in sync with upstream changes
