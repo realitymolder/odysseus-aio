@@ -134,6 +134,7 @@ def get_master_env():
         "ODYSSEUS_NTFY_PORT",
         "ODYSSEUS_SEARXNG_SECRET",
         "ODYSSEUS_NTFY_BASE_URL",
+        "ODYSSEUS_DNS_SERVERS",
     ]:
         val = os.environ.get(key, "")
         if val:
@@ -182,6 +183,12 @@ def create_and_start_container(spec, master_env):
     cmd = ["create", "--name", name, "--network", NETWORK_NAME,
            "--restart", "unless-stopped",
            "--label", MANAGED_LABEL]
+
+    dns_servers = master_env.get("ODYSSEUS_DNS_SERVERS", "8.8.8.8,1.1.1.1")
+    for dns in dns_servers.split(","):
+        dns = dns.strip()
+        if dns:
+            cmd.extend(["--dns", dns])
 
     for host_p, container_p in ports:
         host_p_str = str(host_p)
