@@ -11,7 +11,7 @@
   <Overview>Meta search engine for Odysseus web search (required companion).</Overview>
   <Description>SearXNG is a privacy-respecting meta search engine used by Odysseus for web search capabilities. This is a <b>required companion</b> for Odysseus — without it, the web search feature will not work.<br><br>Ensure the container name matches the <b>SEARXNG_INSTANCE</b> value configured in the main Odysseus template.</Description>
   <Category>AI:Tools</Category>
-  <TemplateURL>https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/templates/odysseus-searxng.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/realitymolder/Odysseus-Unraid/main/templates/odysseus-searxng.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/pewdiepie-archdaemon/odysseus/dev/docs/odysseus.jpg</Icon>
   <Requires/>
   <Config Name="SearXNG Port" Target="8080" Default="8080" Mode="tcp" Description="SearXNG HTTP port" Type="Port" Display="always" Required="true" Mask="false">8080</Config>

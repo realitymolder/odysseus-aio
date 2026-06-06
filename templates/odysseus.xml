@@ -1,6 +1,6 @@
 <Container version="2">
   <Name>Odysseus</Name>
-  <Repository>ghcr.io/YOUR_GITHUB_USERNAME/odysseus:latest</Repository>
+  <Repository>ghcr.io/realitymolder/odysseus-unraid:latest</Repository>
   <Registry>https://ghcr.io</Registry>
   <Network>bridge</Network>
   <MyIP/>
@@ -12,7 +12,7 @@
   <Description>Odysseus is a self-hosted AI workspace — the self-hosted version of the UI experience you get from ChatGPT and Claude. Running on your own hardware, with your own data — local-first, privacy-first.<br><br><b>Features:</b><br>• Chat with any local model or API (vLLM, llama.cpp, Ollama, OpenAI, OpenRouter, GitHub Copilot)<br>• Autonomous agents with MCP, web, files, shell, skills, memory<br>• Cookbook — scans your hardware, recommends models, click to download and serve<br>• Deep Research — multi-step research into visual reports<br>• Compare — blind test models side by side<br>• Documents editor with AI assistance<br>• Email — IMAP/SMTP inbox with AI triage<br>• Notes, Tasks, Calendar (CalDAV)<br>• Memory &amp; Skills — persistent vector + keyword retrieval<br>• Works on mobile (PWA, responsive)<br><br><b>Required companion containers (install before Odysseus):</b><br>• <b>Odysseus-ChromaDB</b> — vector store for semantic memory<br>• <b>Odysseus-SearXNG</b> — meta search engine for web search<br>• <b>Odysseus-ntfy</b> — notification service for reminders and scheduled tasks</Description>
   <Category>AI:Tools</Category>
   <WebUI>http://[IP]:[PORT:7000]</WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/templates/odysseus.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/realitymolder/Odysseus-Unraid/main/templates/odysseus.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/pewdiepie-archdaemon/odysseus/dev/docs/odysseus.jpg</Icon>
   <DonorText>Support Odysseus development</DonorText>
   <DonorLink>https://github.com/pewdiepie-archdaemon/odysseus</DonorLink>

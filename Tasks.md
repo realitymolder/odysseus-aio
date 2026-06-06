@@ -9,22 +9,13 @@
 - [ ] Verify the Action runs successfully and a GHCR package appears under the repo Packages section
 - [ ] Make the GHCR package public: Packages → select package → Package settings → Change visibility to public
 
-## Phase 2: Template configuration
+## Phase 2: GitHub Actions & Docker image
 
-- [ ] Replace `YOUR_GITHUB_USERNAME` with your actual GitHub username in:
-  - `templates/odysseus.xml` (line 3)
-  - `templates/odysseus-chromadb.xml` (line 14)
-  - `templates/odysseus-searxng.xml` (line 14)
-  - `templates/odysseus-ntfy.xml` (line 14)
-  - `ca_profile.xml` (lines 6–7)
-  - `README.md` (lines 14, 32, 69)
-- [ ] Replace `YOUR_REPO_NAME` with the actual repo name in:
-  - `templates/odysseus.xml` (line 14)
-  - `templates/odysseus-chromadb.xml`
-  - `templates/odysseus-searxng.xml`
-  - `templates/odysseus-ntfy.xml`
-  - `ca_profile.xml` (line 7)
-  - `README.md`
+- [ ] In repo Settings → Actions → General: enable "Allow all actions"
+- [ ] In repo Settings → Actions → General: set Workflow permissions to "Read and write permissions"
+- [ ] Push to `main` to trigger `.github/workflows/docker-publish.yml`
+- [ ] Verify the Action runs successfully and a GHCR package appears under repo → Packages
+- [ ] Make the GHCR package public: Packages → select the package → Package settings → Change visibility to public
 
 ## Phase 3: Install on Unraid
 

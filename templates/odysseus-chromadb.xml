@@ -11,7 +11,7 @@
   <Overview>Vector store for Odysseus semantic memory (required companion).</Overview>
   <Description>ChromaDB is the vector database used by Odysseus for persistent semantic memory, skill storage, and vector keyword retrieval. This is a <b>required companion</b> for Odysseus — without it, memory and agent skills will not work.<br><br>Ensure the container name matches the <b>CHROMADB_HOST</b> value configured in the main Odysseus template.</Description>
   <Category>AI:Tools</Category>
-  <TemplateURL>https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/templates/odysseus-chromadb.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/realitymolder/Odysseus-Unraid/main/templates/odysseus-chromadb.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/pewdiepie-archdaemon/odysseus/dev/docs/odysseus.jpg</Icon>
   <Requires/>
   <Config Name="ChromaDB Port" Target="8000" Default="8000" Mode="tcp" Description="ChromaDB API port" Type="Port" Display="always" Required="true" Mask="false">8000</Config>

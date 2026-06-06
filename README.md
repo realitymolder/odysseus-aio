@@ -11,12 +11,8 @@ These templates require a **prebuilt Docker image** on GitHub Container Registry
 1. **Fork or push this repo** to your own GitHub account
 2. **Enable GitHub Actions** in your repo settings (Settings → Actions → General → Allow all actions)
 3. **Enable package creation**: Settings → Actions → General → Workflow permissions → "Read and write permissions" + "Allow GitHub Actions to create and approve pull requests"
-4. **Push to `main`** — the workflow in `.github/workflows/docker-publish.yml` will build and push the image to `ghcr.io/YOUR_USER/YOUR_REPO:latest`
+4. **Push to `main`** — the workflow in `.github/workflows/docker-publish.yml` will build and push the image to `ghcr.io/realitymolder/odysseus-unraid:latest`
 5. **Make the package public**: Go to your repo → Packages → select the package → Package settings → Change visibility to public
-
-### Update template references
-
-After setup, replace `YOUR_GITHUB_USERNAME` and `YOUR_REPO_NAME` in all `templates/*.xml` files and `ca_profile.xml` with your actual GitHub username and repository name.
 
 ## Templates
 
@@ -31,7 +27,7 @@ After setup, replace `YOUR_GITHUB_USERNAME` and `YOUR_REPO_NAME` in all `templat
 
 CA's dependency system enforces the install order — install **Odysseus** and all three required companions are automatically prompted.
 
-1. Add this repository to CA: **Apps** → **Settings** → **Template Repositories** → Add `https://github.com/YOUR_USER/YOUR_REPO`
+1. Add this repository to CA: **Apps** → **Settings** → **Template Repositories** → Add `https://github.com/realitymolder/Odysseus-Unraid`
 2. Install **Odysseus-ChromaDB**
 3. Install **Odysseus-SearXNG**
 4. Install **Odysseus-ntfy**
@@ -48,7 +44,7 @@ The template defaults are preconfigured for these names.
 
 ## Post-install
 
-1. Open the Odysseus WebUI at `http://YOUR_UNRAID_IP:7000`
+1. Open the Odysseus WebUI at `http://<your-unraid-ip>:7000`
 2. Find the auto-generated admin password in the container logs: **Docker** → select Odysseus container → **Logs**
 3. Log in with username `admin` (or the value of `ODYSSEUS_ADMIN_USER`)
 4. Change the password in **Settings**

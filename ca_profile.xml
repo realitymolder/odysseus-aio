@@ -3,8 +3,8 @@
   <Name>Odysseus</Name>
   <Description>Self-hosted AI workspace — chat, agents, deep research, documents, email, calendar, and model Cookbook. Built by pewdiepie-archdaemon.</Description>
   <Icon>https://raw.githubusercontent.com/pewdiepie-archdaemon/odysseus/dev/docs/odysseus.jpg</Icon>
-  <Support>https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/issues</Support>
-  <Repository>https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME</Repository>
+  <Support>https://github.com/realitymolder/Odysseus-Unraid/issues</Support>
+  <Repository>https://github.com/realitymolder/Odysseus-Unraid</Repository>
   <Project>b112f8a763d34c23842dcf4d27ac4bed</Project>
   <Language>en</Language>
   <Disclaimer>The Docker image is built from the official Odysseus source. For issues with the app itself, please see https://github.com/pewdiepie-archdaemon/odysseus/issues</Disclaimer>

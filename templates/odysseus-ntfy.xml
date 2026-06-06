@@ -11,7 +11,7 @@
   <Overview>Notification service for Odysseus reminders and alerts (optional companion).</Overview>
   <Description>ntfy is a simple HTTP-based pub-sub notification service used by Odysseus for sending push notifications, reminders, and scheduled task alerts. This is an <b>optional companion</b> — Odysseus will work without it, but scheduled task notifications will not be delivered.</Description>
   <Category>Tools:Utilities</Category>
-  <TemplateURL>https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/templates/odysseus-ntfy.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/realitymolder/Odysseus-Unraid/main/templates/odysseus-ntfy.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/pewdiepie-archdaemon/odysseus/dev/docs/odysseus.jpg</Icon>
   <Requires/>
   <Config Name="ntfy Port" Target="80" Default="8091" Mode="tcp" Description="ntfy HTTP port" Type="Port" Display="always" Required="true" Mask="false">8091</Config>
