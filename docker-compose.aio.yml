@@ -9,7 +9,13 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - odysseus-aio-data:/data
+      - ./test-data/app:/mnt/user/appdata/odysseus-aio/data
+      - ./test-data/ssh:/mnt/user/appdata/odysseus-aio/ssh
+      - ./test-data/chromadb:/mnt/user/appdata/odysseus-aio/chromadb
     environment:
+      - ODYSSEUS_APP_DATA=/mnt/user/appdata/odysseus-aio/data
+      - ODYSSEUS_APP_SSH=/mnt/user/appdata/odysseus-aio/ssh
+      - ODYSSEUS_CHROMADB_DATA=/mnt/user/appdata/odysseus-aio/chromadb
       - ODYSSEUS_APP_PORT=7000
       - ODYSSEUS_CHROMADB_PORT=8100
       - ODYSSEUS_SEARXNG_PORT=8080

@@ -46,7 +46,10 @@ CONTAINER_SPECS = [
     {
         "name": "odysseus-aio-chromadb",
         "image": "docker.io/chromadb/chroma:latest",
-        "volumes": {"odysseus_aio_chromadb": "/chroma/chroma"},
+        "binds": {
+            "ODYSSEUS_CHROMADB_DATA": ("odysseus_aio_chromadb", "/chroma/chroma"),
+        },
+        "volumes": {},
         "container_port": lambda e: e.get("ODYSSEUS_CHROMADB_CONTAINER_PORT", "8000"),
         "ports": lambda e: [(e.get("ODYSSEUS_CHROMADB_PORT", "8100"), e.get("ODYSSEUS_CHROMADB_CONTAINER_PORT", "8000"))],
         "env": {"ANONYMIZED_TELEMETRY": "FALSE"},
@@ -78,10 +81,12 @@ CONTAINER_SPECS = [
     {
         "name": "odysseus-aio-app",
         "image": "ghcr.io/realitymolder/odysseus-unraid:latest",
+        "binds": {
+            "ODYSSEUS_APP_DATA": ("odysseus_aio_data", "/app/data"),
+            "ODYSSEUS_APP_SSH": ("odysseus_aio_ssh", "/app/.ssh"),
+        },
         "volumes": {
-            "odysseus_aio_data": "/app/data",
             "odysseus_aio_logs": "/app/logs",
-            "odysseus_aio_ssh": "/app/.ssh",
             "odysseus_aio_huggingface": "/app/.cache/huggingface",
             "odysseus_aio_local": "/app/.local",
         },
@@ -136,8 +141,11 @@ def get_master_env():
     for key in list(APP_ENV_MAP.keys()) + [
         "ODYSSEUS_APP_PORT",
         "ODYSSEUS_APP_CONTAINER_PORT",
+        "ODYSSEUS_APP_DATA",
+        "ODYSSEUS_APP_SSH",
         "ODYSSEUS_CHROMADB_PORT",
         "ODYSSEUS_CHROMADB_CONTAINER_PORT",
+        "ODYSSEUS_CHROMADB_DATA",
         "ODYSSEUS_SEARXNG_PORT",
         "ODYSSEUS_SEARXNG_CONTAINER_PORT",
         "ODYSSEUS_NTFY_PORT",
@@ -204,6 +212,14 @@ def create_and_start_container(spec, master_env):
         host_p_str = str(host_p)
         container_p_str = str(container_p)
         cmd.extend(["-p", f"{host_p_str}:{container_p_str}"])
+
+    binds = spec.get("binds", {})
+    for env_var, (fallback_vol, target_path) in binds.items():
+        host_path = master_env.get(env_var, "")
+        if host_path:
+            cmd.extend(["-v", f"{host_path}:{target_path}"])
+        else:
+            cmd.extend(["-v", f"{fallback_vol}:{target_path}"])
 
     volumes = spec.get("volumes", {})
     for vol_name, mount_path in volumes.items():
@@ -273,6 +289,44 @@ def is_provisioned():
     return bool(state.get("containers"))
 
 
+def migrate_volume_to_bind(volume_name, host_path, log_callback=None):
+    if not host_path or not volume_name:
+        return False
+
+    def log(msg):
+        if log_callback:
+            log_callback(msg)
+
+    r = _docker("volume", "inspect", volume_name)
+    if not r["ok"]:
+        return False
+
+    log(f"  Checking {volume_name} → {host_path}...")
+    r = _docker("run", "--rm",
+                "-v", f"{volume_name}:/src",
+                "-v", f"{host_path}:/dst",
+                "alpine:latest",
+                "sh", "-c",
+                "if [ -d /dst ] && [ \"$(ls -A /dst 2>/dev/null)\" ]; then "
+                "  echo 'skip: host path not empty'; exit 0; "
+                "fi; "
+                "mkdir -p /dst && "
+                "cp -a /src/. /dst/. 2>/dev/null && "
+                "echo 'migrated' || echo 'failed'")
+    if not r["ok"]:
+        log(f"  WARNING: migration container failed: {r['error']}")
+        return False
+
+    output = r.get("output", "").strip()
+    if output == "migrated":
+        log(f"  Migrated {volume_name} → {host_path}")
+        return True
+    elif output == "skip: host path not empty":
+        log(f"  Skipped (host path already has data): {volume_name}")
+        return True
+    return False
+
+
 def deploy_all(log_callback=None):
     master_env = get_master_env()
     state = load_state()
@@ -290,10 +344,20 @@ def deploy_all(log_callback=None):
     for spec in CONTAINER_SPECS:
         for vol_name in spec.get("volumes", {}):
             all_volumes.add(vol_name)
+        for env_var, (fallback_vol, target_path) in spec.get("binds", {}).items():
+            if not master_env.get(env_var, ""):
+                all_volumes.add(fallback_vol)
     for vol_name in all_volumes:
         log(f"  Volume: {vol_name}")
         if not ensure_volume(vol_name):
             return {"ok": False, "error": f"Failed to create volume {vol_name}"}
+
+    log("Migrating volumes to host paths (if needed)...")
+    for spec in CONTAINER_SPECS:
+        for env_var, (fallback_vol, _) in spec.get("binds", {}).items():
+            host_path = master_env.get(env_var, "")
+            if host_path:
+                migrate_volume_to_bind(fallback_vol, host_path, log)
 
     for spec in CONTAINER_SPECS:
         name = spec["name"]
