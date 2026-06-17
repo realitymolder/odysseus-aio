@@ -84,7 +84,7 @@ docker compose up -d
 
 This deploys all 4 containers (Odysseus, ChromaDB, SearXNG, ntfy) as a single stack. Edit environment variables in the compose file or create a `.env` file to configure LLM providers, ports, and paths.
 
-See `docker-compose.yml` for the full stack or `docker-compose.aio.yml` for the AIO master container.
+See `docker-compose.yml` for the full stack or `docker-compose.aio.yml` for the AIO master container. See [docs/docker-compose.md](docs/docker-compose.md) for maintenance notes.
 
 ## Post-install
 
