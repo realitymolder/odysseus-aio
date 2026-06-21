@@ -1,3 +1,5 @@
+# **This repo has been changed to only include AIO program/image. if you are looking for unraid templates go to: https://github.com/realitymolder/ca-templates**
+
 # Odysseus AIO
 
 All-in-one master container for [Odysseus](https://github.com/pewdiepie-archdaemon/odysseus) self-hosted AI workspace. One install deploys the full stack: Odysseus, ChromaDB, SearXNG, and ntfy.
