@@ -1,18 +1,12 @@
-# Odysseus Unraid Community App
+# **This repo is being split into 3 dedicated repositories. Hold tight — a more robust structure is coming.**
 
-[Odysseus](https://github.com/pewdiepie-archdaemon/odysseus) is a self-hosted AI workspace — chat, agents, deep research, documents, email, calendar, and model Cookbook. This repository provides the Unraid Community Applications (CA) templates to run Odysseus on your Unraid server.
+# Odysseus Unraid
 
-**Two deployment paths:**
-
-| | Standalone (CA Templates) | AIO (All-In-One) |
-|---|---|---|
-| **What installs** | Odysseus + ChromaDB (SearXNG & ntfy via CA deps) | Single container auto-deploys everything |
-| **Management** | Unraid Docker page | Built-in web UI on port 9000 |
-| **Best for** | Custom configs, selective companions | One-click setup, minimal maintenance |
+[Odysseus](https://github.com/pewdiepie-archdaemon/odysseus) is a self-hosted AI workspace — chat, agents, deep research, documents, email, calendar, and model Cookbook. This repository provides Docker images and a Compose stack to run Odysseus on your Unraid server.
 
 ## Prerequisites
 
-Templates require a **prebuilt Docker image** on GitHub Container Registry. An automated GitHub Action in this repo builds and publishes the image.
+An automated GitHub Action builds and publishes the Docker image to GitHub Container Registry.
 
 ### Setup for first-time use
 
@@ -22,41 +16,9 @@ Templates require a **prebuilt Docker image** on GitHub Container Registry. An a
 4. **Push to `main`** — the workflow in `.github/workflows/docker-publish.yml` builds and pushes the image to `ghcr.io/realitymolder/odysseus-unraid:latest`
 5. **Make the package public**: repo → Packages → select the package → Package settings → Change visibility to public
 
-## Option A: Standalone Install (CA Templates)
-
-Individual templates with CA dependency resolution.
-
-### Templates
-
-| Template | Image | Description |
-|---|---|---|
-| `templates/odysseus.xml` | `ghcr.io/realitymolder/odysseus-unraid:latest` | Main AI workspace |
-| `templates/chromadb.xml` | `chromadb/chroma:latest` | Vector store for semantic memory |
-
-SearXNG and ntfy are pulled in automatically via CA dependency declarations.
-
-### Install steps
-
-1. Add this repo to CA: **Apps** → **Settings** → **Template Repositories** → Add `https://github.com/realitymolder/Odysseus-Unraid`
-2. Install **Odysseus** — CA prompts for ChromaDB, SearXNG, and ntfy automatically
-3. Confirm all containers are named correctly (defaults are preconfigured):
-   - `odysseus-chromadb`
-   - `odysseus-searxng`
-   - `odysseus-ntfy`
-
-The main Odysseus container connects to companions via these Docker internal hostnames.
-
-## Option B: AIO One-Click Install (Recommended)
+## Option A: AIO One-Click Install (Recommended)
 
 Single container that auto-deploys and manages the full stack.
-
-### Templates
-
-| Template | Image | Description |
-|---|---|---|
-| `templates/odysseus-aio.xml` | `ghcr.io/realitymolder/odysseus-unraid:aio` | Master container — deploys everything |
-
-On first start, AIO automatically provisions:
 
 | Container | Image | Host Port |
 |---|---|---|
@@ -67,14 +29,13 @@ On first start, AIO automatically provisions:
 
 ### Install steps
 
-1. Add this repo to CA (same as above)
-2. Install **Odysseus-AIO**
-3. Access the management UI at `http://<your-unraid-ip>:9000`
-4. Use the management UI to deploy, stop, update, or monitor containers
+1. Deploy via `docker compose -f docker-compose.aio.yml up -d` or install the AIO image through Unraid
+2. Access the management UI at `http://<your-unraid-ip>:9000`
+3. Use the management UI to deploy, stop, update, or monitor containers
 
 > **Note:** The AIO container requires Docker socket access (`/var/run/docker.sock`) to manage sibling containers.
 
-## Option C: Docker Compose (Advanced)
+## Option B: Docker Compose
 
 For non-Unraid setups or manual control.
 
@@ -89,8 +50,8 @@ See `docker-compose.yml` for the full stack or `docker-compose.aio.yml` for the 
 ## Post-install
 
 1. Open the Odysseus WebUI:
-   - **Standalone:** `http://<your-unraid-ip>:7000`
    - **AIO:** Management UI at `http://<your-unraid-ip>:9000`, app at port 7000
+   - **Docker Compose:** `http://<your-unraid-ip>:7000`
 2. Find the auto-generated admin password in container logs: **Docker** → select container → **Logs**
 3. Log in with username `admin` (or the value of `ODYSSEUS_ADMIN_USER`)
 4. Change the password in **Settings**
@@ -107,22 +68,9 @@ For NVIDIA GPUs, install the **NVIDIA Container Toolkit** on your Unraid host vi
 
 ## Updating
 
-- **Standalone:** Run the GitHub Action workflow manually, then **Docker** → force update the container. Update companions individually through the Unraid Docker page.
 - **AIO:** Use the management UI at port 9000 (Update All button), or update the AIO image through Unraid and it will pull latest companion images on next deploy.
 - **Docker Compose:** `docker compose pull && docker compose up -d`
 
-## Submitting to Unraid Community Apps
-
-Once your repository is ready:
-
-1. Go to [ca.unraid.net/submit](https://ca.unraid.net/submit)
-2. Fork the [unraid-community-apps](https://github.com/community-apps/unraid-community-apps) repo
-3. Add your `ca_profile.xml` URL to the appropriate location
-4. Submit a pull request
-
-See the [official docs](https://ca.unraid.net/submit/help/repository-xml) for detailed submission guidelines.
-
 ## License
 
-Templates: [MIT](LICENSE)
 Odysseus: [MIT](https://github.com/pewdiepie-archdaemon/odysseus/blob/dev/LICENSE)
