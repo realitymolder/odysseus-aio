@@ -1,0 +1,35 @@
+name: Validate XML templates
+
+on:
+  push:
+    paths: ["templates/*.xml"]
+  pull_request:
+    paths: ["templates/*.xml"]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install xmllint
+        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
+
+      - name: Lint changed XML files
+        run: |
+          files=$(git diff --name-only --diff-filter=ACM HEAD~1 -- 'templates/*.xml' 2>/dev/null || true)
+          if [ -z "$files" ]; then
+            files=$(find templates -maxdepth 1 -name '*.xml' -type f)
+          fi
+          failed=0
+          for f in $files; do
+            echo "Checking $f..."
+            if ! xmllint --noout "$f" 2>&1; then
+              failed=1
+            fi
+          done
+          exit $failed
+
+      - name: Semantic validation
+        run: python3 .github/scripts/check.py

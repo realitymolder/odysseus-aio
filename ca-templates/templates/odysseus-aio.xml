@@ -12,8 +12,8 @@
   <Description>Odysseus AIO is the all-in-one installer for the Odysseus self-hosted AI workspace.&#13;&#13;On first start, it automatically pulls and provisions 4 containers:&#13;odysseus-aio-app — the main AI workspace (port 7000)&#13;odysseus-aio-chromadb — vector database (port 8100)&#13;odysseus-aio-searxng — meta search engine (port 8080)&#13;odysseus-aio-ntfy — push notifications (port 8091)&#13;&#13;Management UI available at http://[IP]:9000 for start, stop, update, and status monitoring.&#13;&#13;No separate companion template installs needed — this is everything in one.</Description>
   <Category>AI:Tools</Category>
   <WebUI>http://[IP]:[PORT:9000]</WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/realitymolder/Odysseus-Unraid/main/templates/odysseus-aio.xml</TemplateURL>
-  <Icon>https://raw.githubusercontent.com/realitymolder/Odysseus-Unraid/main/icon.svg</Icon>
+  <TemplateURL>https://raw.githubusercontent.com/realitymolder/odysseus-ca-templates/main/templates/odysseus-aio.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/realitymolder/odysseus-ca-templates/main/templates/img/odysseus.svg</Icon>
   <DonorText>Support Odysseus development</DonorText>
   <DonorLink>https://github.com/pewdiepie-archdaemon/odysseus</DonorLink>
 

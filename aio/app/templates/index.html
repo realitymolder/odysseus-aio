@@ -64,10 +64,7 @@ tr:last-child td { border-bottom: none; }
       <tr>
         <td><code>{{ name }}</code></td>
         <td style="color:#888;font-size:13px;">
-          {%- if name == "odysseus-aio-app" %}ghcr.io/realitymolder/odysseus-unraid:latest
-          {%- elif name == "odysseus-aio-chromadb" %}chromadb/chroma:latest
-          {%- elif name == "odysseus-aio-searxng" %}searxng/searxng:latest
-          {%- elif name == "odysseus-aio-ntfy" %}binwiederhier/ntfy{% endif -%}
+          {{ image_names.get(name, "unknown") }}
         </td>
         <td>
           {% if status == "running" %}

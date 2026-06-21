@@ -3,7 +3,7 @@
 
 services:
   odysseus:
-    image: ghcr.io/realitymolder/odysseus-unraid:latest
+    image: realitymolder/odysseus:latest
     container_name: odysseus
     ports:
       - "${APP_BIND:-127.0.0.1}:${APP_PORT:-7000}:7000"
