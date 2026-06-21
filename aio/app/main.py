@@ -8,7 +8,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from orchestrator import (
     deploy_all, stop_all, update_all, remove_all_containers,
-    get_all_statuses, is_provisioned, get_master_env, STATE_FILE,
+    get_all_statuses, is_provisioned, get_master_env, get_image_names, STATE_FILE,
 )
 
 app = FastAPI(title="Odysseus AIO")
@@ -102,8 +102,10 @@ async def startup():
 async def index():
     statuses = get_all_statuses()
     ports = get_master_env()
+    image_names = get_image_names()
     html = templates.get_template("index.html").render(
         statuses=statuses,
+        image_names=image_names,
         app_port=ports.get("ODYSSEUS_APP_PORT", "7000"),
         chromadb_port=ports.get("ODYSSEUS_CHROMADB_PORT", "8100"),
         searxng_port=ports.get("ODYSSEUS_SEARXNG_PORT", "8080"),

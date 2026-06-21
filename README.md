@@ -1,76 +1,86 @@
-# **This repo is being split into 3 dedicated repositories. Hold tight — a more robust structure is coming.**
+# Odysseus AIO
 
-# Odysseus Unraid
+All-in-one master container for [Odysseus](https://github.com/pewdiepie-archdaemon/odysseus) self-hosted AI workspace. One install deploys the full stack: Odysseus, ChromaDB, SearXNG, and ntfy.
 
-[Odysseus](https://github.com/pewdiepie-archdaemon/odysseus) is a self-hosted AI workspace — chat, agents, deep research, documents, email, calendar, and model Cookbook. This repository provides Docker images and a Compose stack to run Odysseus on your Unraid server.
+## What it does
 
-## Prerequisites
+On first start, the AIO container automatically pulls and provisions:
 
-An automated GitHub Action builds and publishes the Docker image to GitHub Container Registry.
-
-### Setup for first-time use
-
-1. **Fork or push this repo** to your own GitHub account
-2. **Enable GitHub Actions**: Settings → Actions → General → Allow all actions
-3. **Enable package creation**: Settings → Actions → General → Workflow permissions → "Read and write permissions" + "Allow GitHub Actions to create and approve pull requests"
-4. **Push to `main`** — the workflow in `.github/workflows/docker-publish.yml` builds and pushes the image to `ghcr.io/realitymolder/odysseus-unraid:latest`
-5. **Make the package public**: repo → Packages → select the package → Package settings → Change visibility to public
-
-## Option A: AIO One-Click Install (Recommended)
-
-Single container that auto-deploys and manages the full stack.
-
-| Container | Image | Host Port |
+| Container | Image | Port |
 |---|---|---|
-| `odysseus-aio-app` | `ghcr.io/realitymolder/odysseus-unraid:latest` | 7000 |
+| `odysseus-aio-app` | `realitymolder/odysseus:stable` | 7000 |
 | `odysseus-aio-chromadb` | `chromadb/chroma:latest` | 8100 |
 | `odysseus-aio-searxng` | `searxng/searxng:latest` | 8080 |
 | `odysseus-aio-ntfy` | `binwiederhier/ntfy` | 8091 |
 
-### Install steps
+A built-in management UI at port 9000 handles deploy, stop, update, and status monitoring.
 
-1. Deploy via `docker compose -f docker-compose.aio.yml up -d` or install the AIO image through Unraid
-2. Access the management UI at `http://<your-unraid-ip>:9000`
-3. Use the management UI to deploy, stop, update, or monitor containers
+## Image
 
-> **Note:** The AIO container requires Docker socket access (`/var/run/docker.sock`) to manage sibling containers.
+```
+docker.io/realitymolder/odysseus-aio:latest
+```
 
-## Option B: Docker Compose
+## Quick start
 
-For non-Unraid setups or manual control.
+### Unraid (CA template)
+
+1. Add this repo to CA: **Apps** → **Settings** → **Template Repositories** → `https://github.com/realitymolder/odysseus-aio`
+2. Install **Odysseus-AIO**
+3. Open `http://<your-ip>:9000` for the management UI
+
+### Docker Compose
 
 ```bash
-docker compose up -d
+docker compose -f docker-compose.aio.yml up -d
 ```
 
-This deploys all 4 containers (Odysseus, ChromaDB, SearXNG, ntfy) as a single stack. Edit environment variables in the compose file or create a `.env` file to configure LLM providers, ports, and paths.
+## Configuration
 
-See `docker-compose.yml` for the full stack or `docker-compose.aio.yml` for the AIO master container. See [docs/docker-compose.md](docs/docker-compose.md) for maintenance notes.
+### Choosing stable vs dev
 
-## Post-install
+The AIO pulls the upstream Odysseus image based on the `ODYSSEUS_APP_IMAGE` environment variable:
 
-1. Open the Odysseus WebUI:
-   - **AIO:** Management UI at `http://<your-unraid-ip>:9000`, app at port 7000
-   - **Docker Compose:** `http://<your-unraid-ip>:7000`
-2. Find the auto-generated admin password in container logs: **Docker** → select container → **Logs**
-3. Log in with username `admin` (or the value of `ODYSSEUS_ADMIN_USER`)
-4. Change the password in **Settings**
-5. Configure your LLM provider in **Settings** — add Ollama, OpenAI, or a local endpoint
+| Value | Description |
+|---|---|
+| `realitymolder/odysseus:stable` | Latest stable release (default) |
+| `realitymolder/odysseus:dev` | Latest development build |
+| `realitymolder/odysseus:YYYY-MM-DD` | Pin to a specific date |
 
-## GPU passthrough (optional)
+Set it in the Unraid template or in `docker-compose.aio.yml`.
 
-For NVIDIA GPUs, install the **NVIDIA Container Toolkit** on your Unraid host via the Nvidia Drivers plugin, then add these extra parameters to the Odysseus container:
+### Environment variables
 
-```
---runtime=nvidia
--e NVIDIA_VISIBLE_DEVICES=all
-```
+| Variable | Default | Description |
+|---|---|---|
+| `ODYSSEUS_APP_IMAGE` | `realitymolder/odysseus:stable` | Upstream Odysseus image to deploy |
+| `ODYSSEUS_APP_PORT` | `7000` | Host port for Odysseus web UI |
+| `ODYSSEUS_CHROMADB_PORT` | `8100` | Host port for ChromaDB |
+| `ODYSSEUS_SEARXNG_PORT` | `8080` | Host port for SearXNG |
+| `ODYSSEUS_NTFY_PORT` | `8091` | Host port for ntfy |
+| `ODYSSEUS_PUID` | `99` | User ID for file permissions |
+| `ODYSSEUS_PGID` | `100` | Group ID for file permissions |
+| `ODYSSEUS_AUTH_ENABLED` | `true` | Enable authentication |
+| `ODYSSEUS_ADMIN_USER` | `admin` | Admin username |
+| `ODYSSEUS_ADMIN_PASSWORD` | (auto-generated) | Pre-seed admin password |
+| `ODYSSEUS_LLM_HOST` | | Primary LLM server hostname |
+| `ODYSSEUS_OPENAI_API_KEY` | | OpenAI API key |
+| `ODYSSEUS_OLLAMA_BASE_URL` | | Ollama server URL |
+| `ODYSSEUS_NVIDIA_ENABLED` | `false` | Enable NVIDIA GPU passthrough |
+| `ODYSSEUS_DNS_SERVERS` | `8.8.8.8,1.1.1.1` | DNS for managed containers |
 
-## Updating
+## Requirements
 
-- **AIO:** Use the management UI at port 9000 (Update All button), or update the AIO image through Unraid and it will pull latest companion images on next deploy.
-- **Docker Compose:** `docker compose pull && docker compose up -d`
+- Docker socket access (`/var/run/docker.sock`) for managing sibling containers
+- For GPU: [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
+
+## Related repos
+
+| Repo | Purpose |
+|---|---|
+| [odysseus](https://github.com/realitymolder/odysseus) | Main Odysseus Docker image (stable + dev builds) |
+| [odysseus-ca-templates](https://github.com/realitymolder/odysseus-ca-templates) | Unraid CA templates for standalone install |
 
 ## License
 
-Odysseus: [MIT](https://github.com/pewdiepie-archdaemon/odysseus/blob/dev/LICENSE)
+[MIT](LICENSE)

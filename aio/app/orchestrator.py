@@ -80,7 +80,7 @@ CONTAINER_SPECS = [
     },
     {
         "name": "odysseus-aio-app",
-        "image": "ghcr.io/realitymolder/odysseus-unraid:latest",
+        "image": lambda e: e.get("ODYSSEUS_APP_IMAGE", "realitymolder/odysseus:stable"),
         "binds": {
             "ODYSSEUS_APP_DATA": ("odysseus_aio_data", "/app/data"),
             "ODYSSEUS_APP_SSH": ("odysseus_aio_ssh", "/app/.ssh"),
@@ -154,6 +154,7 @@ def get_master_env():
         "ODYSSEUS_NTFY_BASE_URL",
         "ODYSSEUS_DNS_SERVERS",
         "ODYSSEUS_NVIDIA_ENABLED",
+        "ODYSSEUS_APP_IMAGE",
     ]:
         val = os.environ.get(key, "")
         if val:
@@ -187,6 +188,16 @@ def get_container_status(name):
     if state["ExitCode"] != 0:
         return f"exited ({state['ExitCode']})"
     return "stopped"
+
+
+def resolve_image(spec, master_env):
+    image = spec["image"]
+    return image(master_env) if callable(image) else image
+
+
+def get_image_names():
+    master_env = get_master_env()
+    return {spec["name"]: resolve_image(spec, master_env) for spec in CONTAINER_SPECS}
 
 
 def pull_image(image):
@@ -322,7 +333,7 @@ def deploy_all(log_callback=None):
 
     for spec in CONTAINER_SPECS:
         name = spec["name"]
-        image = spec["image"]
+        image = resolve_image(spec, master_env)
         log(f"Pulling {image}...")
         r = pull_image(image)
         if not r["ok"]:
@@ -371,7 +382,7 @@ def update_all(log_callback=None):
 
     for spec in CONTAINER_SPECS:
         name = spec["name"]
-        image = spec["image"]
+        image = resolve_image(spec, get_master_env())
         log(f"Pulling {image}...")
         r = pull_image(image)
         if not r["ok"]:
