@@ -177,7 +177,7 @@ function pollStatus() {
     .catch(e => console.error('Poll error:', e));
 }
 
-if ({{ 'true' if deploy_in_progress else 'false' }}) {
+if ({{ 'true' if deploy_in_progress else 'false' }} || {{ 'true' if update_in_progress else 'false' }} || {{ 'true' if stop_in_progress else 'false' }} || {{ 'true' if remove_in_progress else 'false' }}) {
   setButtons(false);
   startPolling();
 }
